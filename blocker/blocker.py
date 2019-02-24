@@ -1,13 +1,11 @@
+import sys
 from csv import reader
 from itertools import product, permutations, combinations
 from random import shuffle
 from operator import attrgetter
 
+import click
 
-student_filename = 'Y12 students 2019.csv'
-subject_filename = 'Y12 subjects 2019.csv'
-output_filename = 'Y12 blocking 2019.csv'
-speed = 23
 
 # For non-sixth form choices, set speed to 1.
 # The program should take under 30 seconds.
@@ -408,7 +406,20 @@ def export_blockings(data, blockings_filename):
     blockings_file.close()
 
 
-def main():
+@click.command()
+@click.argument(
+    'student_filename', metavar='STUDENT_FILENAME',
+    type=click.Path(exists=True))
+@click.argument(
+    'subject_filename', metavar='SUBJECT_FILENAME',
+    type=click.Path(exists=True))
+@click.option(
+    '--output', '-o', metavar='OUTPUT_FILENAME', type=click.Path(),
+    default=sys.stdout)
+@click.option('--speed', '-s', metavar='SPEED', type=int, default=23)
+def main(student_filename, subject_filename, output_filename, speed):
+    '''This is a description to tell users what this program does.
+    '''
     data = Data(speed)
     import_students(student_filename, data)
     import_subjects(subject_filename, data)
