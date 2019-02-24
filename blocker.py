@@ -37,9 +37,19 @@ class Subject(object):
         self.no_of_classes = no_of_classes
         self.students = []
         self.block_choices = []
-        self.one_class = False
-        self.two_class = False  
-        self.multiple_class = False
+
+    @property
+    def one_class(self):
+        return self.no_of_classes == 1
+
+    @property
+    def two_class(self):
+        return self.no_of_classes == 2
+
+    @property
+    def multiple_class(self):
+        return self.no_of_classes > 1
+
 
 
 class Student(object):
@@ -85,13 +95,10 @@ def import_subjects(subject_filename, data):
             data.subject_dict[subject.name] = subject
             if subject.no_of_classes == 1:
                 data.one_class_subjects.append(subject)
-                subject.one_class = True
             else:
                 data.multiple_class_subjects.append(subject)
-                subject.multiple_class = True
             if subject.no_of_classes == 2:
                 data.two_class_subjects.append(subject)
-                subject.two_class = True
     if data.allow_free_periods:
         free = Subject('Free', data.no_of_blocks)
         data.subjects.append(free)
@@ -116,7 +123,7 @@ def process_data(data):
     data.subjects_by_name = sorted(data.subjects,
             key=attrgetter('name'))
     data.subjects_by_rank = sorted(data.subjects,
-            key=attrgetter('no_of_classes', 'no_of_students'))  
+            key=attrgetter('no_of_classes', 'no_of_students'))
     for subject, rank in zip(data.subjects_by_rank, range(len(data.subjects))):
         subject.rank = rank
     # This effectively assigns 1 to the least popular subject...
@@ -165,7 +172,7 @@ def find_blocking(data):
                         best_score = score
                         assignable_set = comb
             no_to_define += -1
-        
+
         if len(assignable_set) == no_to_define:
             print('This set of choices is impossible to satisfy.')
             data.impossible = True
@@ -247,7 +254,7 @@ def find_blocking(data):
                 if students_per_block[block] > len(data.students):
                     return False
         return True
-    
+
     def assign_students_to_classes():
         #If a blocking is good, then randomly assign students to class lists.
         for student in data.students:
