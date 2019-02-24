@@ -408,9 +408,10 @@ def export_blockings(data, blockings_filename):
     blockings_file.close()
 
 
-data = Data(speed)
-import_students(student_filename, data)
-import_subjects(subject_filename, data)
-process_data(data)
-if find_blocking(data):
-    export_blockings(data, output_filename)
+if __name__ == '__main__':
+    data = Data(speed)
+    import_students(student_filename, data)
+    import_subjects(subject_filename, data)
+    process_data(data)
+    if find_blocking(data):
+        export_blockings(data, output_filename)
