@@ -13,7 +13,7 @@ setup(
     version='0.0.0',
     license='GPL-3',
     packages=find_packages(),
-    install_requires=[],
+    install_requires=['click'],
     extras_require={},
     entry_points={
         'console_scripts': ['blocker = blocker.blocker:main']
